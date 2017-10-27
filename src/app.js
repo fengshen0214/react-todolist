@@ -8,13 +8,15 @@ export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            todosData: []
+            todosData: [],
+            todoArr: []
         };
         this.handleKeyDownPost = this.handleKeyDownPost.bind(this);
         this.onDestroy = this.onDestroy.bind(this);
         this.onClearCompleted = this.onClearCompleted.bind(this);
     }
 
+    //输入添加列表
     handleKeyDownPost(ev) {
         if (ev.keyCode !== 13) return;
         let value = ev.target.value.trim();
@@ -29,18 +31,18 @@ export default class App extends React.Component {
         ev.target.value = '';
     }
 
-    onDestroy(todo) {
-        console.dir(todo)
+    //删除当前的一条
+    onDestroy(todoV) {
         let {todosData} = this.state;
-        console.log(todosData);
+        console.dir(todosData);
         todosData = todosData.filter((elt) => {
-            return elt.id !== todo.id;
+            return elt.id !== todoV.id;
         });
-
-        this.setState = ({todosData});
-        console.dir(todosData)
+        this.setState = ({todosData:todosData});
+        console.dir(todosData);
     }
 
+    //清楚列表
     onClearCompleted() {
         let {todosData} = this.state;
         todosData = todosData.filter((elt) => {
@@ -49,12 +51,13 @@ export default class App extends React.Component {
         this.setState = ({todosData})
     }
 
+    //
+
     render() {
         let {handleKeyDownPost, onDestroy, onClearCompleted} = this;
         let {todosData} = this.state;
-        let items = null;
-
-        items = todosData.map((elt, i) => {
+        console.log('render')
+        let items = todosData.map((elt, i) => {
             return (
                 <Item
                     {...{
@@ -68,7 +71,7 @@ export default class App extends React.Component {
         return (
             <div>
                 <header className="header">
-                    <h1>todos</h1>
+                    <h1 onClick={onClearCompleted}>todos</h1>
                     <input
                         type="text"
                         className="new-todo"
