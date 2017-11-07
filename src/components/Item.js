@@ -1,6 +1,7 @@
 let propTypes = {
     todoValue: PT.object,
-    onDestroy: PT.func
+    onDestroy: PT.func,
+    onToggle:PT.func
 };
 export default class Item extends React.Component {
     constructor(props) {
@@ -8,12 +9,14 @@ export default class Item extends React.Component {
     }
 
     render() {
-        let {todoValue,onDestroy} = this.props;
-        console.log(todoValue);
+        let {todoValue,onDestroy,onToggle} = this.props;
         return (
             <li>
                 <div className="view">
-                    <input type="checkout" className="toggle"/>
+                    <input type="checkbox" className="toggle"
+                        checked={todoValue.hasComplated}
+                           onChange={ ev => {onToggle(todoValue)}}
+                    />
                     <label htmlFor="">
                         {todoValue.value}
                     </label>
