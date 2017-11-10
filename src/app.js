@@ -19,7 +19,10 @@ class App extends React.Component {
         this.toggleAll = this.toggleAll.bind(this);
         this.onToggle = this.onToggle.bind(this);
         this.changeView = this.changeView.bind(this);
+        this.editItemDone = this.editItemDone.bind(this);
+        this.editEsc = this.editEsc.bind(this);
     }
+
     //footer tab选中
     changeView(view) {
         this.setState({view})
@@ -62,6 +65,30 @@ class App extends React.Component {
         this.setState({todosData});
     }
 
+    //edit修改todosData
+    editItemDone(todoV, value) {
+        console.log(111)
+        let {todosData} = this.state;
+        todosData = todosData.map(elt=> {
+            if (todoV.id === elt.id) {
+                elt.value = value;
+            }
+            return elt;
+        })
+    }
+
+    //editEsc
+    editEsc() {
+        return;
+        // let {todosData} = this.state;
+        // todosData = todosData.map(elt=> {
+        //     if (todoV.id === elt.id) {
+        //         elt.value = elt.value;
+        //     }
+        //
+        // })
+    }
+
     //每一个todo的改变
     onToggle(todo) {
         var {todosData} = this.state;
@@ -94,7 +121,7 @@ class App extends React.Component {
     }
 
     render() {
-        let {handleKeyDownPost, onDestroy, onClearCompleted, inputChange, toggleAll, onToggle, changeView} = this;
+        let {handleKeyDownPost, onDestroy, onClearCompleted, inputChange, toggleAll, onToggle, changeView, editItemDone, editEsc} = this;
         let {todosData, inputVal, view} = this.state;
         //初始组件空对象
         let items = null,
@@ -103,11 +130,10 @@ class App extends React.Component {
         //无勾选状态的总是
         let leftCount = todosData.length;
         //footer下tab筛选
-        items = todosData.filter(elt=>{
-            console.log(111)
+        items = todosData.filter(elt=> {
             //如果为勾选，总数减减
             if (elt.hasComplated == true) leftCount--;
-            switch (view){
+            switch (view) {
                 //未勾选
                 case 'active':
                     return !elt.hasComplated;
@@ -126,7 +152,9 @@ class App extends React.Component {
                     {...{
                         onDestroy,
                         todoValue: elt,
-                        onToggle
+                        onToggle,
+                        editItemDone,
+                        editEsc
                     }}
                     key={i}
                 />
