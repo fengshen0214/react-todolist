@@ -1,5 +1,6 @@
 import Item from "components/Item";
 import Footer from "components/Footer";
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 require("style/base.css");
 require("style/index.css");
@@ -67,7 +68,6 @@ class App extends React.Component {
 
     //edit修改todosData
     editItemDone(todoV, value) {
-        console.log(111)
         let {todosData} = this.state;
         todosData = todosData.map(elt=> {
             if (todoV.id === elt.id) {
@@ -123,6 +123,7 @@ class App extends React.Component {
     render() {
         let {handleKeyDownPost, onDestroy, onClearCompleted, inputChange, toggleAll, onToggle, changeView, editItemDone, editEsc} = this;
         let {todosData, inputVal, view} = this.state;
+        let {location:{pathname}} = this.props;
         //初始组件空对象
         let items = null,
             footer = null,
@@ -133,12 +134,12 @@ class App extends React.Component {
         items = todosData.filter(elt=> {
             //如果为勾选，总数减减
             if (elt.hasComplated == true) leftCount--;
-            switch (view) {
+            switch (pathname) {
                 //未勾选
-                case 'active':
+                case '/active':
                     return !elt.hasComplated;
                 //已勾选
-                case 'completed':
+                case '/completed':
                     return elt.hasComplated;
                 //all
                 default:
@@ -176,8 +177,7 @@ class App extends React.Component {
                         leftCount,
                         showClearButton: leftCount < todosData.length,
                         onClearCompleted,
-                        view,
-                        changeView
+                        pathname
                     }}
                 />
             );
@@ -186,8 +186,12 @@ class App extends React.Component {
             <div>
                 <header className="header">
                     <h1>todos</h1>
-                    <input type="text" className="new-todo" value={inputVal} onChange={inputChange}
-                           onKeyDown={handleKeyDownPost}/>
+                    <input type="text"
+                           className="new-todo"
+                           value={inputVal}
+                           onChange={inputChange}
+                           onKeyDown={handleKeyDownPost}
+                           placeholder="type something here"/>
                 </header>
                 {itemsBox}
                 {footer}
@@ -198,7 +202,9 @@ class App extends React.Component {
 
 
 ReactDOM.render(
-    <App/>,
+    <Router>
+        <Route path="/" component={App}></Route>
+    </Router>,
     document.getElementById('root')
 );
 

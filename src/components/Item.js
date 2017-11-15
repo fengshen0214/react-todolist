@@ -40,6 +40,7 @@ export default class Item extends React.Component {
     //input失去焦点保存当前的内容
     onBlur() {
         this.editItemDone();
+        console.log('onblur')
     }
     //input，enter时
     onEnter(ev) {
